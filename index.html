@@ -33,60 +33,89 @@
 </div>
 
 <script>
-let palabra = "restaurante";
+let palabra = "casa de apuestas";
 let letrasAdivinadas = [];
 let intentos = 0;
 let juegoTerminado = false;
 
 function mostrarTablero(intentos) {
-  // Implementa la lógica para mostrar el ahorcado según los intentos
-  // (cabeza, espalda (2), brazo (2), pierna (2))
-}
+  let dibujo = [
+    " -------",
+    " |     |",
+    " |     O",
+    " |    /|\\",
+    " |     |",
+    " |    / \\",
+    "-+-"
+  ];
 
-function obtenerPalabraMostrada(palabra, letrasAdivinadas) {
-  // Genera la palabra con las letras adivinadas
+  let dibujoFinal = dibujo.slice(0, intentos).join("\n");
+  document.getElementById("intentos").innerText = dibujoFinal;
+
+  let palabraMostrada = "";
+  for (let letra of palabra) {
+    if (letrasAdivinadas.includes(letra) || letra === " ") {
+      palabraMostrada += letra + " ";
+    } else {
+      palabraMostrada += "_ ";
+    }
+  }
+  document.getElementById("palabra").innerText = palabraMostrada;
 }
 
 function esLetra(caracter) {
-  // Verifica si el caracter ingresado es una letra
+  return /^[a-zA-Z]$/.test(caracter);
 }
 
-function letraEnLetrasAdivinadas(letra, letrasAdivinadas) {
-  // Verifica si la letra está en las letras adivinadas
+function letraYaAdivinada(letra) {
+  return letrasAdivinadas.includes(letra);
 }
 
-function letraYaAdivinada(letra, letrasAdivinadas) {
-  // Verifica si la letra ya fue adivinada
-}
-
-function actualizarLetrasAdivinadas(palabra, letra, letrasAdivinadas) {
-  // Actualiza las letras adivinadas
+function actualizarLetrasAdivinadas(letra) {
+  letrasAdivinadas.push(letra);
 }
 
 function jugar() {
   let letraUsuario = document.getElementById("letra").value.toLowerCase();
 
-  if (esLetra(letraUsuario)) {
-    if (letraYaAdivinada(letraUsuario, letrasAdivinadas)) {
-      alert("¡Ya has intentado con esa letra! Prueba otra.");
-    } else if (palabra.includes(letraUsuario)) {
-      alert("¡Bien! '" + letraUsuario + "' está en la palabra.");
-      // Implementa la lógica para actualizar letras adivinadas
-    } else {
-      alert("¡'" + letraUsuario + "' no está en la palabra!");
-      // Implementa la lógica para aumentar intentos
-    }
-  } else {
+  if (!esLetra(letraUsuario)) {
     alert("Entrada inválida. Ingresa una letra.");
+    return;
   }
 
-  // Verificar si el juego ha terminado
-  // Mostrar mensaje de victoria o derrota
+  if (letraYaAdivinada(letraUsuario)) {
+    alert("¡Ya has intentado con esa letra! Prueba otra.");
+    return;
+  }
+
+  if (palabra.includes(letraUsuario)) {
+    actualizarLetrasAdivinadas(letraUsuario);
+    alert("¡Bien! '" + letraUsuario + "' está en la palabra.");
+  } else {
+    intentos++;
+    alert("¡'" + letraUsuario + "' no está en la palabra!");
+  }
+
+  mostrarTablero(intentos);
+
+  if (intentos === 6 || palabraCompleta()) {
+    juegoTerminado = true;
+    let mensaje = intentos === 6 ? "¡Oh no! ¡Has perdido!" : "¡Felicidades! ¡Has ganado!";
+    alert(mensaje);
+  }
+}
+
+function palabraCompleta() {
+  return palabra.split('').every(letra => letrasAdivinadas.includes(letra) || letra === " ");
 }
 
 function reiniciar() {
-  // Implementación para reiniciar el juego
+  letrasAdivinadas = [];
+  intentos = 0;
+  juegoTerminado = false;
+  mostrarTablero(intentos);
 }
+mostrarTablero(intentos);
 </script>
 
 </body>
