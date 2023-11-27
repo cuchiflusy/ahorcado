@@ -23,6 +23,7 @@
     #muñeco {
       font-size: 20px;
       margin-bottom: 20px;
+      white-space: pre; /* Para mantener los saltos de línea */
     }
 
     table {
@@ -71,12 +72,12 @@ function mostrarMuñeco(intentos) {
     " |     |",
     " |     " + (intentos > 0 ? "O" : ""),
     " |    " + (intentos > 2 ? "/|\\" : (intentos > 1 ? "/|" : (intentos > 0 ? " |" : ""))),
-    " |    " + (intentos > 4 ? "/" : ""),
-    " |    " + (intentos > 5 ? "/ \\" : ""),
+    " |     " + (intentos > 3 ? "|" : ""),
+    " |    " + (intentos > 4 ? "/ \\" : ""),
     "-+-"
   ];
 
-  let dibujoFinal = dibujo.slice(0, 6).join("<br>");
+  let dibujoFinal = dibujo.join("<br>");
   document.getElementById("muñeco").innerHTML = dibujoFinal;
 }
 
