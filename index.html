@@ -34,6 +34,11 @@
       padding: 8px;
       border: 1px solid black;
     }
+
+    #mensaje {
+      font-weight: bold;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -43,6 +48,7 @@
     <div class="intentos" id="intentos"></div>
     <div class="palabra" id="palabra"></div>
     <div id="muñeco"></div>
+    <div id="mensaje"></div>
   </div>
   <input type="text" id="letra" maxlength="1" placeholder="Ingresa una letra">
   <button onclick="jugar()">Probar letra</button>
@@ -67,12 +73,11 @@ let intentos = 0;
 
 function mostrarMuñeco(intentos) {
   let dibujo = [
-    "-------",
-    "|     |",
-    "|     " + (intentos > 0 ? "O" : ""),
-    "|    " + (intentos > 2 ? "/|\\" : (intentos > 1 ? "/|" : "")),
-    "|    " + (intentos > 3 ? "/" : ""),
-    "|    " + (intentos > 4 ? "/ \\" : ""),
+    " -------",
+    " |     |",
+    " |     " + (intentos > 0 ? "O" : ""),
+    " |    " + (intentos > 1 ? "/" : " ") + (intentos > 2 ? "|" : "") + (intentos > 3 ? "\\" : ""),
+    " |    " + (intentos > 4 ? "/" : "") + " " + (intentos > 5 ? "\\" : ""),
     "-+-"
   ];
 
@@ -115,23 +120,27 @@ function actualizarLetrasAdivinadas(letra) {
 }
 
 function juegoTerminado() {
-  return intentos >= 6 || palabraCompleta();
+  return intentos >= 7 || palabraCompleta();
 }
 
 function palabraCompleta() {
   return palabra.split('').every(letra => letrasAdivinadas.includes(letra) || letra === " ");
 }
 
+function mostrarMensaje(mensaje) {
+  document.getElementById("mensaje").innerText = mensaje;
+}
+
 function jugar() {
   let letraUsuario = document.getElementById("letra").value.toLowerCase();
 
   if (!esLetra(letraUsuario)) {
-    alert("Entrada inválida. Ingresa una letra.");
+    mostrarMensaje("Entrada inválida. Ingresa una letra.");
     return;
   }
 
   if (letraYaAdivinada(letraUsuario)) {
-    alert("¡Ya has intentado con esa letra! Prueba otra.");
+    mostrarMensaje("¡Ya has intentado con esa letra! Prueba otra.");
     return;
   }
 
@@ -139,8 +148,8 @@ function jugar() {
   mostrarTablero();
 
   if (juegoTerminado()) {
-    let mensaje = intentos >= 6 ? "¡Oh no! ¡Has perdido!" : "¡Felicidades! ¡Has ganado!";
-    alert(mensaje);
+    let mensaje = intentos >= 7 ? "¡Oh no! ¡Has perdido!" : "¡Felicidades! ¡Has ganado!";
+    mostrarMensaje(mensaje);
   }
 }
 
@@ -149,6 +158,7 @@ function reiniciar() {
   letrasFalladas = [];
   intentos = 0;
   mostrarTablero();
+  mostrarMensaje("");
 }
 mostrarTablero();
 </script>
