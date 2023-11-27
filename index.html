@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Juego del Ahorcado</title>
+  <style>
+    /* Estilos para el contenedor del juego */
+    #ahorcado {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Estilos para el tablero, letras, botones, etc. */
+    #tablero {
+      margin-bottom: 20px;
+    }
+
+    .palabra {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="ahorcado">
+  <div id="tablero">
+    <div class="intentos" id="intentos"></div>
+    <div class="palabra" id="palabra"></div>
+  </div>
+  <input type="text" id="letra" maxlength="1" placeholder="Ingresa una letra">
+  <button onclick="jugar()">Probar letra</button>
+  <button onclick="reiniciar()">Reiniciar</button>
+</div>
+
+<script>
+let palabra = "restaurante";
+let letrasAdivinadas = [];
+let intentos = 0;
+let juegoTerminado = false;
+
+function mostrarTablero(intentos) {
+  // Implementa la lógica para mostrar el ahorcado según los intentos
+  // (cabeza, espalda (2), brazo (2), pierna (2))
+}
+
+function obtenerPalabraMostrada(palabra, letrasAdivinadas) {
+  // Genera la palabra con las letras adivinadas
+}
+
+function esLetra(caracter) {
+  // Verifica si el caracter ingresado es una letra
+}
+
+function letraEnLetrasAdivinadas(letra, letrasAdivinadas) {
+  // Verifica si la letra está en las letras adivinadas
+}
+
+function letraYaAdivinada(letra, letrasAdivinadas) {
+  // Verifica si la letra ya fue adivinada
+}
+
+function actualizarLetrasAdivinadas(palabra, letra, letrasAdivinadas) {
+  // Actualiza las letras adivinadas
+}
+
+function jugar() {
+  let letraUsuario = document.getElementById("letra").value.toLowerCase();
+
+  if (esLetra(letraUsuario)) {
+    if (letraYaAdivinada(letraUsuario, letrasAdivinadas)) {
+      alert("¡Ya has intentado con esa letra! Prueba otra.");
+    } else if (palabra.includes(letraUsuario)) {
+      alert("¡Bien! '" + letraUsuario + "' está en la palabra.");
+      // Implementa la lógica para actualizar letras adivinadas
+    } else {
+      alert("¡'" + letraUsuario + "' no está en la palabra!");
+      // Implementa la lógica para aumentar intentos
+    }
+  } else {
+    alert("Entrada inválida. Ingresa una letra.");
+  }
+
+  // Verificar si el juego ha terminado
+  // Mostrar mensaje de victoria o derrota
+}
+
+function reiniciar() {
+  // Implementación para reiniciar el juego
+}
+</script>
+
+</body>
+</html>
