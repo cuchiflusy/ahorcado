@@ -22,17 +22,17 @@
 
     #muñeco {
       font-size: 20px;
+      margin-bottom: 20px;
     }
 
     table {
       margin: 0 auto;
       border-collapse: collapse;
-      margin-bottom: 20px;
     }
 
     th, td {
       padding: 8px;
-      border: 1px solid #000;
+      border: 1px solid black;
     }
   </style>
 </head>
@@ -65,7 +65,7 @@ let letrasAdivinadas = [];
 let letrasFalladas = [];
 let intentos = 0;
 
-function mostrarTablero(intentos) {
+function mostrarMuñeco(intentos) {
   let dibujo = [
     " -------",
     " |     |",
@@ -76,8 +76,12 @@ function mostrarTablero(intentos) {
     "-+-"
   ];
 
-  let dibujoFinal = dibujo.slice(0, 6).join("\n");
-  document.getElementById("muñeco").innerText = dibujoFinal;
+  let dibujoFinal = dibujo.slice(0, 6).join("<br>");
+  document.getElementById("muñeco").innerHTML = dibujoFinal;
+}
+
+function mostrarTablero() {
+  mostrarMuñeco(intentos);
 
   let palabraMostrada = "";
   for (let letra of palabra) {
@@ -132,10 +136,10 @@ function jugar() {
   }
 
   actualizarLetrasAdivinadas(letraUsuario);
-  mostrarTablero(intentos);
+  mostrarTablero();
 
   if (juegoTerminado()) {
-    let mensaje = intentos === 6 ? "¡Oh no! ¡Has perdido!" : "¡Felicidades! ¡Has ganado!";
+    let mensaje = intentos >= 6 ? "¡Oh no! ¡Has perdido!" : "¡Felicidades! ¡Has ganado!";
     alert(mensaje);
   }
 }
@@ -144,9 +148,9 @@ function reiniciar() {
   letrasAdivinadas = [];
   letrasFalladas = [];
   intentos = 0;
-  mostrarTablero(intentos);
+  mostrarTablero();
 }
-mostrarTablero(intentos);
+mostrarTablero();
 </script>
 
 </body>
