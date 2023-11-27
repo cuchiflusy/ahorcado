@@ -7,6 +7,7 @@
     #ahorcado {
       text-align: center;
       margin-top: 20px;
+      font-family: Arial, sans-serif;
     }
 
     /* Estilos para el tablero, letras, botones, etc. */
@@ -18,6 +19,21 @@
       font-size: 24px;
       margin-bottom: 10px;
     }
+
+    #muñeco {
+      font-size: 20px;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 8px;
+      border: 1px solid #000;
+    }
   </style>
 </head>
 <body>
@@ -26,31 +42,42 @@
   <div id="tablero">
     <div class="intentos" id="intentos"></div>
     <div class="palabra" id="palabra"></div>
+    <div id="muñeco"></div>
   </div>
   <input type="text" id="letra" maxlength="1" placeholder="Ingresa una letra">
   <button onclick="jugar()">Probar letra</button>
   <button onclick="reiniciar()">Reiniciar</button>
+  <table>
+    <tr>
+      <th>Letras probadas</th>
+      <th>Letras falladas</th>
+    </tr>
+    <tr>
+      <td id="letrasProbadas"></td>
+      <td id="letrasFalladas"></td>
+    </tr>
+  </table>
 </div>
 
 <script>
 let palabra = "casa de apuestas";
 let letrasAdivinadas = [];
+let letrasFalladas = [];
 let intentos = 0;
-let juegoTerminado = false;
 
 function mostrarTablero(intentos) {
   let dibujo = [
     " -------",
     " |     |",
-    " |     O",
-    " |    /|\\",
-    " |     |",
-    " |    / \\",
+    " |     " + (intentos > 0 ? "O" : ""),
+    " |    " + (intentos > 2 ? "/|\\" : (intentos > 1 ? "/|" : (intentos > 0 ? " |" : ""))),
+    " |    " + (intentos > 4 ? "/" : ""),
+    " |    " + (intentos > 5 ? "/ \\" : ""),
     "-+-"
   ];
 
-  let dibujoFinal = dibujo.slice(0, intentos).join("\n");
-  document.getElementById("intentos").innerText = dibujoFinal;
+  let dibujoFinal = dibujo.slice(0, 6).join("\n");
+  document.getElementById("muñeco").innerText = dibujoFinal;
 
   let palabraMostrada = "";
   for (let letra of palabra) {
@@ -61,6 +88,9 @@ function mostrarTablero(intentos) {
     }
   }
   document.getElementById("palabra").innerText = palabraMostrada;
+
+  document.getElementById("letrasProbadas").innerText = letrasAdivinadas.join(", ");
+  document.getElementById("letrasFalladas").innerText = letrasFalladas.join(", ");
 }
 
 function esLetra(caracter) {
@@ -72,7 +102,20 @@ function letraYaAdivinada(letra) {
 }
 
 function actualizarLetrasAdivinadas(letra) {
-  letrasAdivinadas.push(letra);
+  if (palabra.includes(letra)) {
+    letrasAdivinadas.push(letra);
+  } else {
+    letrasFalladas.push(letra);
+    intentos++;
+  }
+}
+
+function juegoTerminado() {
+  return intentos >= 6 || palabraCompleta();
+}
+
+function palabraCompleta() {
+  return palabra.split('').every(letra => letrasAdivinadas.includes(letra) || letra === " ");
 }
 
 function jugar() {
@@ -88,31 +131,19 @@ function jugar() {
     return;
   }
 
-  if (palabra.includes(letraUsuario)) {
-    actualizarLetrasAdivinadas(letraUsuario);
-    alert("¡Bien! '" + letraUsuario + "' está en la palabra.");
-  } else {
-    intentos++;
-    alert("¡'" + letraUsuario + "' no está en la palabra!");
-  }
-
+  actualizarLetrasAdivinadas(letraUsuario);
   mostrarTablero(intentos);
 
-  if (intentos === 6 || palabraCompleta()) {
-    juegoTerminado = true;
+  if (juegoTerminado()) {
     let mensaje = intentos === 6 ? "¡Oh no! ¡Has perdido!" : "¡Felicidades! ¡Has ganado!";
     alert(mensaje);
   }
 }
 
-function palabraCompleta() {
-  return palabra.split('').every(letra => letrasAdivinadas.includes(letra) || letra === " ");
-}
-
 function reiniciar() {
   letrasAdivinadas = [];
+  letrasFalladas = [];
   intentos = 0;
-  juegoTerminado = false;
   mostrarTablero(intentos);
 }
 mostrarTablero(intentos);
